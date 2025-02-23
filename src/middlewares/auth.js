@@ -12,7 +12,7 @@
  const userAuth = (req, res, next) =>{
   console.log("User is Authenticate is checked")
   const token = 'xyz';
-  const isAdminAuthorized = (token=== 'xyz');
+  const isAdminAuthorized = (token === 'xyz');
   if (!isAdminAuthorized) {
     res.send("UnAuthorized Request ")
   } else {

@@ -8,13 +8,19 @@ const userSchema = new mongoose.Schema({
     },
     lastName:{
         type:"string",
-        required:false,
         length:20
     },
     email:{
         type:"string",
         required:true,
-        unique:true
+        unique:true,
+        lowercase:true,
+        trim:true,
+        validate(value){
+            if(!validator.isEmail(value)){
+                throw new error("Invalid email address...")
+            }
+        }
     },
     password:{
         type:"string",
@@ -24,9 +30,16 @@ const userSchema = new mongoose.Schema({
         type:"number"
     },
     gender:{
-        type:"string"
+        type:"string",
+        validate(value){
+            if(!["male","female","other"].includes(value)){
+                throw new Error("Gender must be male or female or other")
+            }
+        }
     }
-})
+},
+ {timestamps:true}
+);
 
 const User = mongoose.model("User",userSchema);
 
