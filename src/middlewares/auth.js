@@ -1,21 +1,25 @@
- const adminAuth = (req , res , next) =>{
-  console.log("Admin Authentication is getting checked")
-  const token = 'xyz';
-  const isAdminAuthorized = (token=== 'xyz');
-  if (!isAdminAuthorized) {
-    res.send("UnAuthorized Request ")
-  } else {
-    next()
-  }
- }
+const authAdmin = (req,res,next)=>{
+    console.log("Admin is authorized or not")
+    const token = 'xyz';
+    const isadminAuthorized = token === 'xyz';
+    if(!isadminAuthorized){
+        res.send( "Unauthorized User") 
+    }else{
+        next();
+    }
+}
+const authUser = (req,res,next)=>{
+    console.log("user is authorized or not")
+    const token = 'xyz';
+    const isadminAuthorized = token === 'xyz';
+    if(!isadminAuthorized){
+        res.send( "Unauthorized User") 
+    }else{
+        next();
+    }
+}
 
- const userAuth = (req, res, next) =>{
-  console.log("User is Authenticate is checked")
-  const token = 'xyz';
-  const isAdminAuthorized = (token === 'xyz');
-  if (!isAdminAuthorized) {
-    res.send("UnAuthorized Request ")
-  } else {
-    next()
-  }
- }
+module.exports = {
+    authAdmin,
+    authUser
+};

@@ -1,46 +1,72 @@
-const mongoose = require ("mongoose");
+const mongoose = require('mongoose');
 
 const userSchema = new mongoose.Schema({
+    // Always Written in CammelTypes;
     firstName:{
-        type:"string",
-        required:true,
-        length:20
+        type: String,
+        required: true,
+        maxlength: 20
+
     },
     lastName:{
-        type:"string",
-        length:20
+        type: String,
     },
-    email:{
-        type:"string",
-        required:true,
-        unique:true,
-        lowercase:true,
-        trim:true,
-        validate(value){
+    emailId:{
+        type: String,
+        required: true,
+        unique: true,
+        trim: true,
+        validator(value){
             if(!validator.isEmail(value)){
-                throw new error("Invalid email address...")
+                throw new Error("Please enter a valid email")
             }
         }
     },
     password:{
-        type:"string",
-        required:true
+        type: String,
+        required: true,
+        trim: true,
+        minlength: 8,
+
     },
+    // confirmPassword: {
+    //     type: String,
+    //     required: true,
+    //     trim: true,
+    // },
     age:{
-        type:"number"
+        type: Number,
+        min:12,
     },
     gender:{
-        type:"string",
+        type: String,
+        //enum: ["Male","Female","Other"],
         validate(value){
-            if(!["male","female","other"].includes(value)){
-                throw new Error("Gender must be male or female or other")
+            if(["male","female","other"]
+              .includes(value)  
+            ){
+                throw new Error("enter Please valid a Gender")
             }
         }
-    }
-},
- {timestamps:true}
-);
+    },
+    photoUrl:{
+        type: String,
+        default:"https://cdn.pixabay.com"
+    },
+    about_me:{
+        type: String,
+        default: "Nothings Here!!",
+    },
+    Skills:[{
+        type: String,
+        maxlength:10
+    }]
+},{
+    timestamps: true
+});
 
-const User = mongoose.model("User",userSchema);
+const User =mongoose.model("User", userSchema);
 
-module.exports = User;
+module.exports = {
+    User
+} 

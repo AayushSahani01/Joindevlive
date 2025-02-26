@@ -2,7 +2,7 @@
   "name": "dev_tinder",
   "version": "1.0.0",
   "description": "A simply communicate with developer connection path builds.",
-  "main": "src/app.js",
+  "main": "app.js",
   "scripts": {
     "start": "node src/app.js",
     "dev": "nodemon src/app.js"
@@ -10,7 +10,6 @@
   "author": "Ayush Sahani",
   "license": "ISC",
   "dependencies": {
-    "dotenv": "^16.4.7",
     "express": "^4.21.2",
     "mongoose": "^8.10.1",
     "validator": "^13.12.0"
