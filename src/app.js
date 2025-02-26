@@ -2,8 +2,13 @@ const express = require("express");
 const { authAdmin, authUser } = require("./middlewares/auth");
 const { connectDB } = require("./config/database");
 const { User } = require("./models/users");
+const { validateSignUpData } = require("./utils/validation.js");
+const bcrypt = require("bcrypt");
+const cookieParser = require("cookie-parser");
+const jwt = require("jsonwebtoken");
 
 const app = express();
+
 //app.use('/admin',authAdmin);
 //app.use('/user',authUser);
 
@@ -19,26 +24,93 @@ const app = express();
 //     res.send("Login Successfully")
 // })
 app.use(express.json());
-app.post ('/signup',async (req,res)=>{
-    console.log(req.body);
- // Creating a new Instance of User Model;
-    const user = new User (req.body);
-   // const user = new User({
+app.use(cookieParser());
+
+app.post ('/signup',async (req,res)=>{   
+    try{
+        console.log(req.body);
+        //validation of Data:
+        validateSignUpData(req);
         
-        // firstName: req.body.firstName, 
-        // lastName:req.body.lastName,  
-        // emailId: req.body.emailId,
-        // password: req.body.password,
-       
-    //})  
+        const {password} = req.body;
+        //Encryption of Password:
+        const passwordHash = await bcrypt.hash(password , 10);
+        console.log(passwordHash);
+        
+        // Creating a new Instance of User Model;
+        //const user = new User(req.body);
+        const user = new User({
+            firstName:req.body.firstName,gender:req.body.gender,
+            emailId:req.body.emailId,
+            password:passwordHash
+        })
+ 
+       await user.save();
+        res.send("User to Added the Successfully")
     
+    } catch (error){
+      //throw new Error("ERROR:"+error.message)
+        res.send(error.message).status(400)
+      
+    }
+})
+
+app.post('/login',async (req,res)=>{
     try {
-            await user.save();
-            res.send("User to Added the Successfully")
-    
+       const {emailId,password} = req.body;
+       const user = await User.findOne({emailId:emailId}); 
+       if(!user){
+        res.send("User not found"),
+        {status:404}
+       
+       }
+       const isValidPassword = await user.validatePassword(password);
+       if(isValidPassword){
+        // Create a JWT TOKEN;
+    //const token = await jwt.sign({_id:user._id},"Anshu$As@540",{
+    //         expiresIn:"7d"
+    //     }
+    // );
+        const token = await user.getJWT();
+        console.log(token);
+        
+        // Add TOKEN to Cookies and Sending the User's:
+        res.cookie("jwtToken",token,{
+            expires: new Date(Date.now() + 60*1000)
+        });
+        res.send("Login Successfully!!"),
+        {status:200}
+       }
+       else{
+        res.send("Please enter a valid Password")
+        .status(404)
+        
+       }
+      
+    } catch(error) {
+        res.send(error.message).status(400)
+    }
+})
+
+app.post('/sendconnection',authUser,async(req,res)=>{
+    try {
+        const user = req.user;
+        console.log("Connection Request Established!!")
+        res.send(
+            user.firstName + ": sent to request ");
     } catch (error) {
-       throw new Error("User Adding Error"),
-       {status:400} 
+        throw new Error ("ERROR TO CONNECTION: " + error.message) 
+    }
+})
+
+app.get('/profile',authUser, async(req,res) =>{
+try {
+    const user = req.user;
+     res.send(user)
+       
+    }catch(error) {
+        res.send("ERROR CATCHED: " + error.message).status(400)
+     
     }
 })
 
@@ -74,33 +146,41 @@ app.delete('/user',async(req,res)=>{
 })
 
 // Updated user deatails: PATCH API
-app.patch('/user',async(req,res) =>{
-    const userId = req.body.userId;
+app.patch('/user/:userId',async(req,res) =>{
+    const userId = req.params.userId;
     const data = req.body;
 try {
-    const ALLOWED_UPDATE = [  "firstName",
-        "lastName","password","photoUrl","about_me",
+    const ALLOWED_UPDATE = [  
+        "firstName",
+        "lastName",
+        "password",
+        "photoUrl",
+        "about_me",
         "Skills",
     ];
-    const isUpdateAllow = Object.keys(data).every((k) =>ALLOWED_UPDATE.includes(k)
-    );
+    const isUpdateAllow = Object.keys(data).every((update) => ALLOWED_UPDATE.includes(update)
+    )
     if(!isUpdateAllow){
-        throw new error("This is fields not allowed to update")
+        res.status(400).send("Update is not allowed")
     }
-     const user = await User.findByIdAndUpdate({_id:userId},data,{
-     returnDocument:"after",
-            // Validated field want to update use by runValidator:
-        runValidators:true,
-        });
+    const user = await User.findByIdAndUpdate({_id:userId},data,{
+     returnDocument:"before",
+     runValidators:true
+    // Validated field want to update use by runValidator:
+        
+    });
     console.log(user)
     res.send("User Updated Successfully!!");
+   
     } catch  {
         res.send("Someting went wrong while updating user").status(400)  
     }
-})
+});
+
+ 
 // app.use((req,res)=>{
-    //     res.send("Welcome to Dev Tinder API")
-    // });   
+    //     res.send("Welcome to Dev Tinder API"
+// });   
 
 // app.get('/admin/user',(req,res)=>{
 //     //checking  user is authorized or not =>> middleware
