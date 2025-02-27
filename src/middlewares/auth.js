@@ -44,12 +44,10 @@ const authUser = async (req,res,next)=>{
         req.user = user;
         next();
      }
-     res.send("User not found").status(404);  
-    
     console.log(cookies);
     console.log(decodedMsg);
  }catch (error) {
-    res.send("ERROR IS FOUNDED: " + error.message)
+    throw new Error("ERROR IS FOUNDED: " + error.message)
    }
 };
 

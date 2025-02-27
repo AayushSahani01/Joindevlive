@@ -1,4 +1,5 @@
 const validator = require('validator');
+ 
 
 const validateSignUpData = (req) => {
     const {firstName,gender, emailId, password} = req.body;
@@ -14,6 +15,24 @@ const validateSignUpData = (req) => {
     }
 }
 
+const validateEditData = (req) => {
+    const ALLOWED_UPDATE = [  
+        "firstName",
+        "lastName",
+        "password",
+        "photoUrl",
+        "about_me",
+        "Skills",
+    ];
+     const isEditValid = Object.keys(req.body).every((item) => (ALLOWED_UPDATE.includes(item)));
+     if(!isEditValid){
+        throw new Error("Update is not allowed")
+     }
+     return isEditValid;
+}
+
+
 module.exports = {
-    validateSignUpData
+    validateSignUpData,
+    validateEditData
 }
