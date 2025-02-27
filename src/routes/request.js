@@ -2,6 +2,7 @@ const express = require("express");
 const requestRouter = express.Router();
 const { authUser } = require("../middlewares/auth");
 const { User } = require("../models/users");
+const { ConnectionRequestModel } = require("../models/connectionRequest");
 
 
 requestRouter.post('/sendconnection',authUser,async(req,res)=>{
@@ -16,4 +17,5 @@ requestRouter.post('/sendconnection',authUser,async(req,res)=>{
     }
 });
 
+ 
 module.exports = requestRouter;

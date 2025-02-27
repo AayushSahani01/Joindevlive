@@ -31,9 +31,8 @@ authRouter.post ('/signup',async (req,res)=>{
         res.status(200).send("User to Added the Successfully")
     
     } catch (error){
-      //throw new Error("ERROR:"+error.message)
-      throw new Error(error.message)
-      
+      throw new Error("ERROR:"+error.message)
+       
     }
 })
 

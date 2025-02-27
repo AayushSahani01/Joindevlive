@@ -31,8 +31,19 @@ const validateEditData = (req) => {
      return isEditValid;
 }
 
+const validateForgetPass = (req) => {
+    const authorizedUser = {
+        emailId: req.body.emailId,
 
+    }
+    const isAuthorizedUser = Object.keys(authorizedUser).every((item) => (authorizedUser[item] = req.body[item]));
+    if(!isAuthorizedUser){
+        throw new Error("Update is not allowed")
+     }
+     return isAuthorizedUser;
+} 
 module.exports = {
     validateSignUpData,
-    validateEditData
+    validateEditData,
+    validateForgetPass
 }
