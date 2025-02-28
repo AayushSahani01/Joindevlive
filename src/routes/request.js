@@ -17,5 +17,26 @@ requestRouter.post('/sendconnection',authUser,async(req,res)=>{
     }
 });
 
+requestRouter.post('/request/send/:status/:userId',authUser,async (req,res) =>{
+    try {
+        const fromUserId = req.user._id;
+        const toUserId = req.params.toUserId;
+        const status = req.params.status;
+        
+        const connectionResponse = new ConnectionRequestModel({
+           fromUserId,
+           toUserId,
+           status,
+        })
+         await connectionResponse.save()
+        res.json({
+            success:true,
+            message:"Connection request send successfully.",
+            connectionResponse
+        })
+    } catch (err) {
+        res.send("ERROR IS CATCHED :"+err.message)
+    }
+})
  
 module.exports = requestRouter;
