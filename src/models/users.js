@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const validator = require('validator');
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const { ConnectionRequestModel } = require("./connectionRequest");
 
 const userSchema = new mongoose.Schema({
     // Always Written in CammelTypes;
@@ -68,6 +69,9 @@ const userSchema = new mongoose.Schema({
     timestamps: true
 });
 
+// userSchema.index({
+//    firstName:1
+// })
 userSchema.methods.getJWT = async function(){
     const user = this;
 

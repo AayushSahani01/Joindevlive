@@ -36,6 +36,6 @@ profileRouter.patch('/profile/edit',authUser,async(req,res)  =>{
     } catch (error) {
         res.status(400).send("ERROR CATCHED: " + error.message);
     }
-})
+}); 
 
 module.exports = profileRouter;
