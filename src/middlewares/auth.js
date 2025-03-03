@@ -31,7 +31,7 @@ const authUser = async (req,res,next)=>{
         res.send ("token is not provided!!")
      }
      // Validated TOKEN:
-     const decodedMsg = await jwt.verify(token,"Anshu$As@540");
+     const decodedMsg = await jwt.verify(token,process.env.SECRET_KEY);
      const {_id} = decodedMsg;
      console.log("Logged User Info:",_id);
   

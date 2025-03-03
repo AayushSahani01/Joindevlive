@@ -3,7 +3,7 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const { validateSignUpData } = require("../utils/validation");
 const {User}  = require("../models/users");
-
+require('dotenv').config();
 
 const authRouter = express.Router();
 
@@ -47,7 +47,7 @@ authRouter.post('/login',async (req,res)=>{
        const isValidPassword = await user.validatePassword(password);
        if(isValidPassword){
         // Create a JWT TOKEN;
-    //const token = await jwt.sign({_id:user._id},"Anshu$As@540",{
+    //const token = await jwt.sign({_id:user._id},process.env.SECRET_KEY,{
     //         expiresIn:"7d"
     //     }
     // );
