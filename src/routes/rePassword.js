@@ -25,4 +25,6 @@ passwordRouter.patch('/forgetpassword',async(req,res)=>{
     }
 })
 
-module.exports = passwordRouter;
+module.exports = {
+    passwordRouter
+}

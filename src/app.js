@@ -25,6 +25,7 @@ const authRouter = require('./routes/auth');
 const profileRouter = require('./routes/profile');
 const requestRouter = require('./routes/request');
 const rePasswordRouter = require('./routes/rePassword');
+const e = require("express");
 
 app.use('/',authRouter);
 app.use('/',profileRouter);
@@ -128,3 +129,4 @@ app.listen(7777,()=>{
 .catch( (error) =>{
     console.log("Database connection Failed!!", error)
 })
+.finally(() => process.exit(1));
