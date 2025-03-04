@@ -1,15 +1,43 @@
-# Welcome there, Dev Tinder
+# Welcome there, JoinDevLive
 
-## Project Setup
+## Project Setup/Running Locally:
+Open source repo for Joindevlive
 
-Follow these steps to set up the project locally:
+Follow these steps by step to setup the project locally in your System:
 
 1. **Clone the repository:**
-   ```bash
-   git clone https://github.com/yourusername/dev_tinder.git
-   cd dev_tinder
-2. **Install dependencies:**
-    ```npm install
+```bash
+git clone https://github.com/youruser_name/joindevlive.git
+```
+ 
+2. **Navigate to the project directory:**
 
-3.  **Run locally cmd**
-    ```npm run dev
+```bash
+cd devTinder
+```
+ 
+3. **Running Install dependencies:**
+
+```npm install```
+ 
+4. **Create a .env file:**
+
+```touch .env```
+
+
+5. **database Connection**
+
+```bash
+npm install mongoose
+```
+ 
+6. **Start the development server:**
+
+```bash
+npm run dev
+```
+
+## Contributors
+
+<a  href="https://github.com/AayushSahani01/Joindevlive/graphs/contributors">
+</a>
